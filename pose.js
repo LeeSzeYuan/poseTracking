@@ -28,7 +28,9 @@ function gotPoses(poses){
 }
 
 function draw(){
-    image(video, 0, 0)
+    translate(video.width, 0)
+    scale(-1, 1)
+    image(video, 0, 0, video.width, video.height)
 
     if (pose) {
         let eyeR = pose.rightEye
@@ -53,6 +55,7 @@ function draw(){
         let a = skeleton[i][0]
         let b = skeleton[i][1]
         strokeWeight(2)
+        stroke(255)
         line(a.position.x, a.position.y, b.position.x, b.position.y)
     }
 

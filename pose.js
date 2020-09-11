@@ -13,13 +13,22 @@ let state = 'waiting'
 let targetLabel
 
 function keyPressed(){
-    targetLabel = key
-    console.log(targetLabel)
-    setTimeout(function (){
-        console.log('collecting')
-        state = 'collecting'
-    }, 1000)
+    if (key =='s') {
+        brain.saveData()
+    } else {
+        targetLabel = key
+        console.log(targetLabel)
+        setTimeout(function (){
+            console.log('collecting')
+            state = 'collecting'   
     
+            setTimeout(function(){
+                console.log('not collecting')
+                state = 'waiting'
+            }, 10000)
+    
+        }, 10000)
+    }
 }
 
 function modelLoaded() {
@@ -43,22 +52,27 @@ function setup(){
 }
 
 function gotPoses(poses){
-    console.log(poses)
+    //onsole.log(poses)
     if(poses.length > 0){
         pose = poses[0].pose;
         skeleton = poses[0].skeleton
 
-        let inputs = []
-        for (let i = 0; i<pose.keypoints.length; i++){
-            let x = pose.keypoints[i].position.x
-            let y = pose.keypoints[i].position.y
-                inputs.push(x)
-                inputs.push(y)
-        }
-        let target = [targetLabel]
+        if (state == 'collecting'){
+            let inputs = []
+            for (let i = 0; i<pose.keypoints.length; i++){
+                let x = pose.keypoints[i].position.x
+                let y = pose.keypoints[i].position.y
+                    inputs.push(x)
+                    inputs.push(y)
+            }
+            let target = [targetLabel]
 
-        brain.addData(inputs, target)
+            brain.addData(inputs, target)
+        }
+
+
     }//can try addd confidence score into the neural network
+
 }
 
 function draw(){

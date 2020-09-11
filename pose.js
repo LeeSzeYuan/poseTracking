@@ -7,6 +7,21 @@ let poseNet
 let pose;
 let skeleton
 
+let brain;
+
+let state = 'waiting'
+let targetLabel
+
+function keyPressed(){
+    targetLabel = key
+    console.log(targetLabel)
+    setTimeout(function (){
+        console.log('collecting')
+        state = 'collecting'
+    }, 1000)
+    
+}
+
 function modelLoaded() {
     console.log('poseNet ready')
 }
@@ -17,6 +32,14 @@ function setup(){
     video.hide()
     poseNet = ml5.poseNet(video, modelLoaded)
     poseNet.on('pose', gotPoses)
+
+    let options = {
+        inputs: 34,
+        outputs: 4,
+        task: 'classification',
+        debug: true
+    }
+    brain = ml5.neuralNetwork(options)
 }
 
 function gotPoses(poses){
